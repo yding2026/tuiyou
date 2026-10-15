@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>俞丁悦 · 推优竞选</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+    <style>
+        /* 三个栏目同一屏切换，正文不小于 18px */
+        :root {
+            --ink: #3c2a1e;
+            --paper: #fffaf3;
+            --sun: #ffb703;
+            --deep: #f08a2c;
+            --font: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            --display: "ZCOOL XiaoWei", "KaiTi", "STKaiti", serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            color: var(--ink);
+            font-family: var(--font);
+            font-size: 18px;
+            line-height: 1.75;
+            background:
+                radial-gradient(circle at 88% 8%, #fff4c4 0 70px, transparent 71px),
+                radial-gradient(circle at 88% 8%, #ffbf3c 0 46px, transparent 48px),
+                linear-gradient(180deg, #ffd56a 0%, #ffe7b5 42%, #fff6ea 100%);
+        }
+
+        button, input { font-family: inherit; font-size: 18px; color: inherit; }
+        button { cursor: pointer; border: 0; }
+        button:focus-visible, input:focus-visible {
+            outline: 3px solid #e07a2f;
+            outline-offset: 3px;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            min-height: 100%;
+            padding: 28px 22px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .who {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .who img {
+            width: 84px;
+            height: 104px;
+            object-fit: cover;
+            border-radius: 16px;
+            background: #ffe3b3;
+        }
+
+        h1 {
+            font-family: var(--display);
+            font-size: 48px;
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .who p { font-size: 20px; }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .tab {
+            min-height: 92px;
+            padding: 16px;
+            border-radius: 20px;
+            background: rgba(255, 250, 243, 0.78);
+            text-align: left;
+            line-height: 1.45;
+            box-shadow: 0 8px 20px rgba(120, 72, 24, 0.08);
+        }
+
+        .tab.is-on {
+            background: linear-gradient(180deg, #ffc15a, #f08a2c);
+            box-shadow: 0 12px 28px rgba(240, 138, 44, 0.28);
+        }
+
+        .panel {
+            flex: 1;
+            background: var(--paper);
+            border-radius: 24px;
+            padding: 28px 26px;
+            box-shadow: 0 16px 40px rgba(120, 72, 24, 0.12);
+        }
+
+        .panel h2 {
+            font-family: var(--display);
+            font-size: 34px;
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+
+        .panel p + p { margin-top: 14px; }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .person {
+            background: #fff;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 8px 18px rgba(120, 72, 24, 0.06);
+        }
+
+        .person h3 {
+            font-family: var(--display);
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .vote {
+            display: grid;
+            justify-items: center;
+            gap: 16px;
+            text-align: center;
+            padding-top: 8px;
+        }
+
+        .face {
+            width: 168px;
+            height: 168px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #ffc15a, #f08a2c);
+            box-shadow: 0 12px 28px rgba(240, 138, 44, 0.3);
+            display: grid;
+            place-items: center;
+        }
+
+        .face.is-happy { transform: scale(1.06); }
+
+        .eyes {
+            width: 78px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .eyes i {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--ink);
+            display: block;
+        }
+
+        .mouth {
+            display: block;
+            width: 42px;
+            height: 20px;
+            border: 4px solid var(--ink);
+            border-top: 0;
+            border-radius: 0 0 40px 40px;
+            margin: 0 auto;
+        }
+
+        .face.is-happy .mouth {
+            width: 54px;
+            height: 28px;
+        }
+
+        .choices {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .choices button, .send {
+            background: #fff;
+            border-radius: 999px;
+            padding: 12px 18px;
+            box-shadow: 0 8px 18px rgba(120, 72, 24, 0.08);
+        }
+
+        .choices button.is-picked, .send {
+            background: linear-gradient(180deg, #ffc15a, #f08a2c);
+        }
+
+        .send { padding: 12px 22px; }
+
+        .name-row {
+            display: flex;
+            gap: 10px;
+            width: min(520px, 100%);
+        }
+
+        .name-row input {
+            flex: 1;
+            border: 2px solid #f0d2b0;
+            background: #fff;
+            border-radius: 14px;
+            padding: 12px 14px;
+        }
+
+        .board {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .chip {
+            background: #fff3d8;
+            border-radius: 16px;
+            padding: 12px 16px;
+        }
+
+        .chip button {
+            background: transparent;
+            margin-left: 8px;
+        }
+
+        [hidden] { display: none !important; }
+
+        @media (max-width: 760px) {
+            h1 { font-size: 40px; }
+            .tabs, .two { grid-template-columns: 1fr; }
+            .panel h2 { font-size: 30px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .face.is-happy { transform: none; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <header class="who">
+            <img src="avatar.jpg" alt="俞丁悦" id="avatar">
+            <div>
+                <h1>俞丁悦</h1>
+                <p>推优竞选</p>
+            </div>
+        </header>
+
+        <nav class="tabs" aria-label="三个栏目">
+            <button class="tab is-on" type="button" data-tab="friends">我朋友对我的影响</button>
+            <button class="tab" type="button" data-tab="future">我自己的未来发展怎么和入党一致</button>
+            <button class="tab" type="button" data-tab="vote">希望大家给我投票</button>
+        </nav>
+
+        <section class="panel" id="friends">
+            <h2>我朋友对我的影响</h2>
+            <p>我的好朋友和我的男朋友对我影响最大。</p>
+            <div class="two">
+                <article class="person">
+                    <h3>我的好朋友</h3>
+                    <p>她十分爱国，喜欢看红色作品，比如《大决战》《觉醒年代》《新青年》。她的偶像是陈延年。她喜欢参加各种红色活动，国庆节一大早会跑去看升旗。她想留在国内建设祖国。</p>
+                </article>
+                <article class="person">
+                    <h3>我的男朋友</h3>
+                    <p>他热衷军事，不错过每一场阅兵。他考上了国防科技大学，经常和我说，想见证收复台湾。</p>
+                </article>
+            </div>
+            <p>我受他们影响，变得热诚，也有热血。我想和他们一起奋斗，一起奉献。</p>
+        </section>
+
+        <section class="panel" id="future" hidden>
+            <h2>我自己的未来发展怎么和入党一致</h2>
+            <p>我喜欢干实事。我想做点事，至少让一小部分人的生活更便利，能真正影响一些人、一些事。</p>
+            <p>造福谁呢？祖国人民优先，世界人民靠后了。所以我的长期发展在国内。</p>
+            <p>我留在国内，想助推发展，还想和好朋友一起奋斗，所以我要入党。</p>
+            <p>我的未来发展和入党是一致的。</p>
+        </section>
+
+        <section class="panel" id="vote" hidden>
+            <h2>希望大家给我投票</h2>
+            <div class="vote">
+                <button class="face" type="button" id="voteBtn" aria-label="我投俞丁悦">
+                    <span>
+                        <span class="eyes" aria-hidden="true"><i></i><i></i></span>
+                        <span class="mouth" aria-hidden="true"></span>
+                    </span>
+                </button>
+                <p id="voteText">点这个笑脸，就算投给我。</p>
+                <div class="choices" id="choices" hidden>
+                    <button type="button" data-word="支持你">支持你</button>
+                    <button type="button" data-word="加油">加油</button>
+                    <button type="button" data-word="投给你">投给你</button>
+                </div>
+                <form class="name-row" id="noteForm" hidden>
+                    <input id="noteInput" maxlength="20" placeholder="写一句给你的话">
+                    <button class="send" type="submit">送出</button>
+                </form>
+                <div class="board" id="board"></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        "use strict";
+
+        // 投票留下的话只保存在这台设备上
+        const KEY = "ydy_tuiyou_notes";
+        const avatar = document.getElementById("avatar");
+        const voteBtn = document.getElementById("voteBtn");
+        const voteText = document.getElementById("voteText");
+        const choices = document.getElementById("choices");
+        const noteForm = document.getElementById("noteForm");
+        const board = document.getElementById("board");
+        let notes = [];
+
+        avatar.addEventListener("error", function onAvatarError() {
+            this.remove();
+        });
+
+        function showTab(id) {
+            document.querySelectorAll(".tab").forEach((tab) => {
+                tab.classList.toggle("is-on", tab.dataset.tab === id);
+            });
+            document.querySelectorAll(".panel").forEach((panel) => {
+                panel.hidden = panel.id !== id;
+            });
+        }
+
+        function esc(text) {
+            return String(text).replace(/[&<>"']/g, (ch) => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            }[ch]));
+        }
+
+        function loadNotes() {
+            try {
+                notes = JSON.parse(localStorage.getItem(KEY) || "[]");
+            } catch (err) {
+                notes = [];
+            }
+            if (!Array.isArray(notes)) notes = [];
+        }
+
+        function saveNotes() {
+            try { localStorage.setItem(KEY, JSON.stringify(notes.slice(0, 20))); } catch (err) { /* 写不进去就只留在页面上 */ }
+        }
+
+        function renderNotes() {
+            board.innerHTML = notes.map((note, index) => `
+                <p class="chip">${esc(note)}<button type="button" data-remove="${index}">收回</button></p>
+            `).join("");
+        }
+
+        function addNote(text) {
+            const clean = text.trim();
+            if (!clean) return;
+            notes.unshift(clean);
+            notes = notes.slice(0, 20);
+            saveNotes();
+            renderNotes();
+        }
+
+        document.addEventListener("click", (event) => {
+            const tab = event.target.closest(".tab");
+            if (tab) showTab(tab.dataset.tab);
+
+            if (event.target.closest("#voteBtn")) {
+                voteBtn.classList.add("is-happy");
+                voteText.textContent = "谢谢你。请在推优的时候投给我。";
+                choices.hidden = false;
+                noteForm.hidden = false;
+            }
+
+            const word = event.target.closest("[data-word]");
+            if (word) {
+                word.classList.add("is-picked");
+                addNote(word.dataset.word);
+            }
+
+            const remove = event.target.closest("[data-remove]");
+            if (remove) {
+                notes.splice(Number(remove.dataset.remove), 1);
+                saveNotes();
+                renderNotes();
+            }
+        });
+
+        noteForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const input = document.getElementById("noteInput");
+            addNote(input.value);
+            input.value = "";
+        });
+
+        loadNotes();
+        renderNotes();
+    </script>
+</body>
+</html>
